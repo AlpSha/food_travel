@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1974996545",
+    "firebase_url": "https://food-travel-a04eb.firebaseio.com",
+    "project_id": "food-travel-a04eb",
+    "storage_bucket": "food-travel-a04eb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1974996545:android:d89b443ca4462b483540c0",
+        "android_client_info": {
+          "package_name": "com.alpsha.food_travel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1974996545-d8i9dphc5k9tf44qdm32t2mui06lqun6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.alpsha.food_travel",
+            "certificate_hash": "c77f297d25e1750fe5e7a3664ab205daaa6cd337"
+          }
+        },
+        {
+          "client_id": "1974996545-0dmd49ushinvasdcnnjg0gkj85nqv0pg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHGxR9OmaiixQWzSnGLE_OA145_5hLi4g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1974996545-0dmd49ushinvasdcnnjg0gkj85nqv0pg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
