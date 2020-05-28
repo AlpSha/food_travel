@@ -29,7 +29,9 @@ class GetProductsListOnCurrentCountryObserver extends Observer<List<Product>> {
   GetProductsListOnCurrentCountryObserver(this._presenter);
 
   @override
-  void onComplete() {}
+  void onComplete() {
+    print('completed');
+  }
 
   @override
   void onError(e) {

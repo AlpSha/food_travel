@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:food_travel/src/app/constants.dart';
-import 'package:food_travel/src/app/pages/home/home_view.dart';
 import 'package:food_travel/src/app/pages/login/login_presenter.dart';
 import 'package:food_travel/src/app/pages/phone_auth/phone_auth_view.dart';
 import 'package:food_travel/src/app/pages/registration/registration_view.dart';

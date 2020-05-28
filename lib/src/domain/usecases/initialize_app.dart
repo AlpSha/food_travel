@@ -16,7 +16,9 @@ class InitializeApp extends UseCase<void, void> {
     try {
       await _repository.fetchAllData();
       controller.close();
-    } catch (e) {
+    } catch (e, st) {
+      print(e);
+      print(st);
       controller.addError(e);
     }
     return controller.stream;

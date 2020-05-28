@@ -22,6 +22,7 @@ class UserMapper {
       birthYear: userRegistration.birthYear,
       languages: userRegistration.languages,
       allergies: userRegistration.allergies,
+      favoriteProducts: [],
     );
   }
 }

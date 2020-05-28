@@ -12,23 +12,24 @@ class Product {
   String title;
   String imageUrl;
 
-  Product({
-    this.userHasAllergy,
+  Product(
+    this.title,
+    this.price,
     this.isFavorite,
     this.barcode,
     this.reviews,
     this.avgRate,
     this.ingredients,
-    this.price,
-    this.title,
+    this.allergens,
     this.imageUrl,
-  });
+    this.userHasAllergy,
+  );
 
   Product.fromProduct(Product product) {
     userHasAllergy = product.userHasAllergy;
     isFavorite = product.isFavorite;
     barcode = product.barcode;
-    if(reviews != null) {
+    if (reviews != null) {
       reviews = product.reviews.map((rev) => Review.fromReview(rev)).toList();
     }
     avgRate = product.avgRate;

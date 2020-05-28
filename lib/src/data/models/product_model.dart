@@ -27,12 +27,12 @@ class ProductModel {
     title = snapshot.data['title'];
     barcode = snapshot.data['barcode'];
     country = snapshot.data['country'];
-    ingredients = snapshot.data['ingredients'];
-    allergens = snapshot.data['allergens'];
-    imageUrl = snapshot.data['pictureUrl'];
+    ingredients = List.from(snapshot.data['ingredients']);
+    allergens = List.from(snapshot.data['allergens']);
+    imageUrl = snapshot.data['imageUrl'];
     productId = snapshot.data['productId'];
     price = snapshot.data['price'];
-    reviews = snapshot.data['reviews'].map((rev) => ReviewModel.fromMap(rev)).toList();
+    reviews = List.from(snapshot.data['reviews'].map((rev) => ReviewModel.fromMap(rev)));
   }
 }
 

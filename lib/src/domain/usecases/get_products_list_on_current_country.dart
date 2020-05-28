@@ -9,18 +9,25 @@ class GetProductsListOnCurrentCountry extends UseCase<List<Product>, void> {
 
   GetProductsListOnCurrentCountry(this._repository);
 
-  Function onListChanged;
+  StreamSubscription subscription;
+  Function onListChange;
   StreamController<List<Product>> controller = StreamController();
 
   @override
   Future<Stream<List<Product>>> buildUseCaseStream(void params) async {
+    onListChange = (products) {
+      try {
+        controller.add(products);
+      } catch(e, st) {
+        print(st);
+        rethrow;
+      }
+    };
     try {
-      onListChanged = () {};
-      _repository.getProductsStreamOnCurrentCountry().listen((event) {
-        print(event);
-      });
-      controller.add([]);
-    } catch (e) {
+      final stream = _repository.getProductsStreamOnCurrentCountry();
+      subscription = stream.listen(onListChange);
+    } catch (e, st) {
+      print(st);
       controller.addError(e);
     }
     return controller.stream;
@@ -28,6 +35,8 @@ class GetProductsListOnCurrentCountry extends UseCase<List<Product>, void> {
 
   @override
   void dispose() {
+    print('dispose usecase');
+    subscription.cancel();
     controller.close();
     super.dispose();
   }

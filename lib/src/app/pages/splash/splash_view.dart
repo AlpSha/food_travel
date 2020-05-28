@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:food_travel/src/app/constants.dart';
 import 'package:food_travel/src/app/pages/splash/splash_controller.dart';

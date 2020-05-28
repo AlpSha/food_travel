@@ -11,6 +11,7 @@ import 'package:food_travel/src/domain/entities/user.dart';
 
 class UserHelper {
   static final _firestore = Firestore.instance;
+  static final _firebaseAuth = FirebaseAuth.instance;
 
   static String uid;
   static User _user;
@@ -33,10 +34,17 @@ class UserHelper {
     _user = null;
   }
 
-  static Future<User> fetchCurrentUser() async {
-    return _fetchUserWithUid(uid);
+  static Future<void> fetchCurrentUser() async {
+    try {
+      final user = await _firebaseAuth.currentUser();
+      uid = user.uid;
+      _user = await _fetchUserWithUid(uid);
+    } catch(e, st) {
+      print(e);
+      print(st);
+    }
   }
-  
+
   static Future<User> _fetchUserWithUid(String uid) async {
     try {
       final snapshot =
@@ -98,7 +106,7 @@ class UserHelper {
   static bool containsAllergenForUser(Product product) {
     return userHasAllergyToAny(product.allergens);
   }
-  
+
   static bool userHasAllergyToAny(List<String> allergens) {
     for (var allergy in _user.allergies) {
       for (var allergen in allergens) {
@@ -107,7 +115,7 @@ class UserHelper {
         }
       }
     }
-    return false;   
+    return false;
   }
 
   static Future<bool> updateAllergies(List<String> allergies) async {
@@ -124,7 +132,7 @@ class UserHelper {
       return false;
     }
   }
-  
+
   static Future<List<String>> fetchAllergiesOfUser() async {
     try {
       final snapshot =

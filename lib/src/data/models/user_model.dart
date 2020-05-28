@@ -50,17 +50,17 @@ class UserModel {
   }
 
   UserModel.fromSnapshot(DocumentSnapshot snapshot) {
-      uid = snapshot.documentID;
-      homeCountry =  snapshot.data['homeCountry'];
-      currentCountry =  snapshot.data['currentCountry'];
-      phone =  snapshot.data['phone'];
-      email =  snapshot.data['email'];
-      gender =  snapshot.data['gender'];
-      birthYear =  snapshot.data['birthYear'];
-      languages =  snapshot.data['languages'];
-      allergies =  snapshot.data['allergies'];
-      favoriteProducts =  snapshot.data['favoriteProducts'];
-      os =  snapshot.data['os'];
-      osVersion =  snapshot.data['osVersion'];
+    uid = snapshot.documentID;
+    homeCountry = snapshot.data['homeCountry'];
+    currentCountry = snapshot.data['currentCountry'];
+    phone = snapshot.data['phone'];
+    email = snapshot.data['email'];
+    gender = snapshot.data['gender'];
+    birthYear = snapshot.data['birthYear'];
+    languages = List.from(snapshot.data['languages']);
+    allergies = List.from(snapshot.data['allergies']);
+    favoriteProducts = List.from(snapshot.data['favoriteProducts']);
+    os = snapshot.data['os'];
+    osVersion = snapshot.data['osVersion'];
   }
 }

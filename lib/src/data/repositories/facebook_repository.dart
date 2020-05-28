@@ -28,7 +28,6 @@ class FacebookRepository
         _credential = FacebookAuthProvider.getCredential(
             accessToken: result.accessToken.token);
         await _firebaseAuth.signInWithCredential(_credential);
-        await UserHelper.fetchCurrentUser();
         UserHelper.uid = (await _firebaseAuth.currentUser()).uid;
         break;
       case FacebookLoginStatus.error:
@@ -76,7 +75,6 @@ class FacebookRepository
       }
       await setFacebookFields();
       await UserHelper.addUserToDatabase(_userModel);
-      await UserHelper.fetchCurrentUser();
     } catch (error) {
       rethrow;
     }

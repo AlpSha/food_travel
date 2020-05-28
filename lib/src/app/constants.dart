@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:food_travel/src/app/pages/home/home_view.dart';
+import 'package:food_travel/src/app/widgets/drawer_option_item.dart';
 
 const kPrimaryColor = Color(0xffed3851);
 const kPrimaryColorLight = Color(0xfff25f73);
@@ -222,8 +223,8 @@ AppBar kAppBar(String title) {
 TextStyle kAppBarTitleStyle() {
   return TextStyle(
     fontSize: 23,
-    letterSpacing: 2,
-    fontWeight: FontWeight.w500,
+    letterSpacing: 1.6,
+    fontWeight: FontWeight.w400,
   );
 }
 
@@ -239,23 +240,27 @@ Widget kMainDrawer(BuildContext context) {
           ),
           ListTile(
             title: Text(
-              'Menu',
+              'Menü',
               style: TextStyle(
                 fontSize: 20,
               ),
             ),
           ),
-          Card(
-            elevation: 5,
-            color: kPrimaryColorLighter,
-            child: ListTile(
-              leading: Icon(
-                Icons.today,
-                color: kPrimaryColor,
+          DrawerOptionItem(
+            title: 'Ürünler',
+            iconData: Icons.local_grocery_store,
+            onTap: () =>
+                Navigator.of(context).pushReplacementNamed(HomeView.routeName),
+          ),
+          DrawerOptionItem(
+            title: 'Favoriler',
+            iconData: Icons.star,
+            onTap: () => Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (ctx) => HomeView(
+                  onlyFavorites: true,
+                ),
               ),
-              title: Text('Today', style: kDrawerItemTextStyle()),
-              onTap: () => Navigator.of(context)
-                  .pushReplacementNamed(HomeView.routeName),
             ),
           ),
         ],
@@ -284,13 +289,15 @@ void kShowAlert({
         backgroundColor: kGrey,
         title: Text(
           title,
-          style: Theme.of(context).textTheme.title,
+          style: Theme.of(context).textTheme.headline2.copyWith(
+                color: Colors.black,
+              ),
         ),
         content: Text(
           content,
           style: TextStyle(
             fontSize: 17,
-            color: Colors.white,
+            color: Colors.black,
           ),
         ),
         actions: actions != null
