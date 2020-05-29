@@ -47,7 +47,9 @@ class FacebookRepository
 
   @override
   Future<bool> get isAuthenticated async {
-    return _firebaseAuth.currentUser() != null;
+    await _firebaseAuth.signOut();
+    final user = await _firebaseAuth.currentUser();
+    return user != null;
   }
 
   @override

@@ -80,7 +80,8 @@ class PhoneRepository implements AuthenticationRepository, RegistrationRepositor
 
   @override
   Future<bool> get isAuthenticated async {
-    return _firebaseAuth.currentUser() != null;
+    final user = _firebaseAuth.currentUser();
+    return user != null;
   }
 
   @override
