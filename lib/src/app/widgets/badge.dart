@@ -1,0 +1,52 @@
+import 'package:flutter/material.dart';
+import 'package:food_travel/src/app/constants.dart';
+
+class Badge extends StatelessWidget {
+  const Badge({
+    Key key,
+    @required this.child,
+    @required this.value,
+    this.color,
+    this.noBadge: false,
+  }) : super(key: key);
+
+  final Widget child;
+  final String value;
+  final Color color;
+  final bool noBadge;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        child,
+        if(!noBadge)
+        Positioned(
+          right: 8,
+          top: 8,
+          child: Container(
+            padding: EdgeInsets.all(2.0),
+            // color: Theme.of(context).accentColor,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10.0),
+              color: color ?? kPrimaryColorLighter,
+            ),
+            constraints: BoxConstraints(
+              minWidth: 16,
+              minHeight: 16,
+            ),
+            child: Text(
+              value,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 12,
+                color: kPrimaryColor,
+              ),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+}

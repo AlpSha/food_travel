@@ -44,7 +44,7 @@ class ProductHelper {
       await fetchProducts();
     }
     final product =
-        products.firstWhere((product) => product.barcode == barcode);
+        _products.firstWhere((product) => product.barcode == barcode);
     if (product != null) {
       product.isFavorite = isFavorite;
     }

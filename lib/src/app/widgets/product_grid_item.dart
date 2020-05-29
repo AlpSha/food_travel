@@ -6,14 +6,14 @@ import 'package:food_travel/src/domain/entities/product.dart';
 class ProductGridItem extends StatefulWidget {
   final Product product;
   final Function toggleFavorite;
-  final Function addToList;
-  final Function undoAddToList;
+  final Function onTap;
+  final Function onPlus;
 
   ProductGridItem({
     @required this.product,
     @required this.toggleFavorite,
-    @required this.addToList,
-    @required this.undoAddToList,
+    @required this.onPlus,
+    this.onTap,
   });
 
   @override
@@ -56,9 +56,7 @@ class _ProductGridItemState extends State<ProductGridItem> {
           borderRadius: BorderRadius.circular(10),
           child: GridTile(
             child: GestureDetector(
-              onTap: () {
-                //TODO
-              },
+              onTap: widget.onTap,
               child: url == null
                   ? Container()
                   : Image.network(
@@ -93,23 +91,7 @@ class _ProductGridItemState extends State<ProductGridItem> {
               ),
               trailing: IconButton(
                 icon: Icon(Icons.add_circle),
-                onPressed: () {
-                  widget.addToList();
-                  Scaffold.of(context).hideCurrentSnackBar();
-                  Scaffold.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        'Alışveriş listesine eklendi',
-                        textAlign: TextAlign.center,
-                      ),
-                      duration: Duration(seconds: 2),
-                      action: SnackBarAction(
-                        label: "Geri al",
-                        onPressed: widget.undoAddToList,
-                      ),
-                    ),
-                  );
-                },
+                onPressed: widget.onPlus,
                 color: kPrimaryColor,
               ),
             ),

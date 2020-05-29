@@ -5,7 +5,11 @@ import 'package:food_travel/src/domain/repositories/product_repository.dart';
 class ProductRepositoryData implements ProductRepository {
   @override
   void addProductToFavorites(Product product) {
-    // TODO: implement addProductToFavorites
+    try {
+      ProductHelper.markProductAsFavorite(true, product.barcode);
+    } catch(e) {
+      rethrow;
+    }
   }
 
   @override
@@ -21,7 +25,11 @@ class ProductRepositoryData implements ProductRepository {
 
   @override
   void removeProductFromFavorites(Product product) {
-    // TODO: implement removeProductFromFavorites
+    try {
+      ProductHelper.markProductAsFavorite(false, product.barcode);
+    } catch(e) {
+      rethrow;
+    }
   }
 
 }

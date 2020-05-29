@@ -39,4 +39,26 @@ class Product {
     title = product.title;
     imageUrl = product.imageUrl;
   }
+
+  String get allergensString {
+    var result = '';
+    for(var allergen in allergens) {
+      result += '$allergen';
+      if(allergens.last != allergen) {
+        result += ', ';
+      }
+    }
+    return result;
+  }
+
+  String get ingredientsString {
+    var result = '';
+    for(var ingredient in ingredients) {
+      result += '$ingredient';
+      if(allergens.last != ingredient) {
+        result += ', ';
+      }
+    }
+    return result;
+  }
 }

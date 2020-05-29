@@ -1,10 +1,10 @@
 import 'package:food_travel/src/domain/entities/product.dart';
 
 abstract class ShoppingRepository {
-  List<Product> getShoppingList();
+  Stream<List<Product>> getShoppingListStream();
 
-  void addToShoppingList(Product product);
+  Future<void> addToShoppingList(Product product);
 
-  void removeFromShoppingList(Product product);
+  Future<void> removeFromShoppingList(Product product);
 
 }

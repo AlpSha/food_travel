@@ -10,14 +10,14 @@ import 'package:food_travel/src/domain/entities/product.dart';
 class ShoppingHelper {
   static final _firestore = Firestore.instance;
 
-  static List<Product> _shoppingList;
-  
-  static List<Product> get shoppingList => _shoppingList.map((product) => Product.fromProduct(product)).toList();
-  
-  static StreamController<List<Product>> _streamController;
-  
+  static Set<Product> _shoppingList;
 
-  static fetchShoppingList() async {
+  static List<Product> get shoppingList =>
+      _shoppingList.map((product) => Product.fromProduct(product)).toList();
+
+  static StreamController<List<Product>> _streamController;
+
+  static Future<bool> fetchShoppingList() async {
     final user = UserHelper.currentUser;
     final uid = UserHelper.uid;
     final querySnapshot = await _firestore
@@ -26,22 +26,31 @@ class ShoppingHelper {
         .where('country', isEqualTo: user.country)
         .getDocuments();
     if (querySnapshot.documents.length == 0) {
-      return;
+      return false;
     }
     final snapshot = querySnapshot.documents.first;
-    _createListFromSnapshot(snapshot);
-    _streamController.add(shoppingList);
+    _shoppingList = await _createListFromSnapshot(snapshot);
+    prepareController();
+    return true;
   }
 
-  static Future<bool> addToShoppingList(String barcode) async {
+  static void prepareController() {
+    _streamController = StreamController.broadcast(onListen: () async {
+      _streamController.add(shoppingList);
+    });
+  }
+
+  static Future<bool> addToShoppingList(Product product) async {
     try {
       final id = await _getDocumentIdOfCurrentShoppingList();
       if (id == null) {
         return false;
       }
       await _firestore.collection(COL_SHOPPING_LIST).document(id).updateData({
-        'items': FieldValue.arrayUnion([barcode])
+        'items': FieldValue.arrayUnion([product.barcode])
       });
+      _shoppingList.add(product);
+      print(_shoppingList);
       _streamController.add(shoppingList);
       return true;
     } catch (e, st) {
@@ -60,6 +69,7 @@ class ShoppingHelper {
       await _firestore.collection(COL_SHOPPING_LIST).document(id).updateData({
         'items': FieldValue.arrayRemove([barcode])
       });
+      _shoppingList.removeWhere((product) => product.barcode == barcode);
       _streamController.add(shoppingList);
       return true;
     } catch (e, st) {
@@ -69,16 +79,35 @@ class ShoppingHelper {
     }
   }
 
-  static Future<List<Product>> _createListFromSnapshot(DocumentSnapshot snapshot) async {
-
-    final model = ShoppingListModel.fromSnapshot(snapshot);
-
-    final _shoppingList = [];
-    for (var item in model.items) {
-      final product = await ProductHelper.fetchProductWithBarcode(item);
-      _shoppingList.add(product);
+  static Future<bool> createShoppingListForUser() async {
+    try {
+      final model = ShoppingListModel(
+          uid: UserHelper.uid, items: [], country: UserHelper.country);
+      await _firestore.collection(COL_SHOPPING_LIST).add(model.toDataMap());
+      return true;
+    } catch (e, st) {
+      print(e);
+      print(st);
+      return false;
     }
-    return _shoppingList;
+  }
+
+  static Future<Set<Product>> _createListFromSnapshot(
+      DocumentSnapshot snapshot) async {
+    try {
+      final model = ShoppingListModel.fromSnapshot(snapshot);
+
+      final shoppingList = Set<Product>();
+      await Future.forEach(model.items, (item) async {
+        final product = await ProductHelper.fetchProductWithBarcode(item);
+        shoppingList.add(product);
+      });
+      return shoppingList;
+    } catch (e, st) {
+      print(e);
+      print(st);
+      return null;
+    }
   }
 
   static Future<String> _getDocumentIdOfCurrentShoppingList() async {
@@ -107,18 +136,9 @@ class ShoppingHelper {
     return query;
   }
 
-  static Stream<List<Product>> receiveProductsStream() {
-    if(_streamController == null) {
-      _streamController = StreamController.broadcast(
-          onListen: () async {
-            if (_shoppingList == null) {
-              await fetchShoppingList();
-            }
-            _streamController.add(shoppingList);
-            return null;
-          }
-      );  
-    }
+  static Stream<List<Product>> receiveListStream() {
+    Future.delayed(Duration.zero)
+        .then((_) => _streamController.add(shoppingList));
     return _streamController.stream;
   }
 }

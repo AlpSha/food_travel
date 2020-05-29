@@ -8,11 +8,20 @@ class ShoppingListModel {
   ShoppingListModel({
     this.items,
     this.country,
+    this.uid,
   });
 
   ShoppingListModel.fromSnapshot(DocumentSnapshot snapshot) {
     country = snapshot.data['country'];
-    items = snapshot.data['items'];
+    items = List.from(snapshot.data['items']);
     uid = snapshot.data['uid'];
+  }
+
+  Map<String, dynamic> toDataMap() {
+    return {
+      'country': country,
+      'items': items,
+      'uid': uid,
+    };
   }
 }

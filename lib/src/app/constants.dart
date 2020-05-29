@@ -11,7 +11,7 @@ const kPrimaryColorLighter = Color(0xfff4c6ce);
 const kPrimaryColorLightest = Color(0xfff6eaed);
 const kFadedColor = kPrimaryColorLight;
 const kPrimaryTextColor = Color(0xff191919);
-const kGrey = Color(0xfff7f7f7);
+const kGrey = Color(0xffe8e8e8);
 const kGreyBorderColor = Color(0xffd2d2d2);
 const kGreyDark = Color(0xffababab);
 const kTextFieldColor = kPrimaryWhiteColor;
@@ -189,26 +189,24 @@ Widget kPhoneNumberInputWidget({
 }
 
 AppBar kAppBarWithBackButton(BuildContext context, String title,
-    {List<Widget> actions}) {
+    {List<Widget> actions, Widget bottom}) {
   return AppBar(
     title: Text(
       title,
-      style: TextStyle(
-        fontSize: 23,
-      ),
+      style: kAppBarTitleStyle(),
     ),
+    bottom: bottom,
+    centerTitle: true,
     backgroundColor: kPrimaryColor,
     leading: IconButton(
       icon: Icon(Icons.arrow_back),
       onPressed: () => Navigator.of(context).pop(),
     ),
-    actions: <Widget>[
-      ...actions,
-    ],
+    actions: actions,
   );
 }
 
-AppBar kAppBar(String title) {
+AppBar kAppBar(String title, {List<Widget> actions}) {
   return AppBar(
     title: Text(
       title,
@@ -217,6 +215,9 @@ AppBar kAppBar(String title) {
     centerTitle: true,
     backgroundColor: kPrimaryColor,
     elevation: 0,
+    actions: <Widget>[
+      ...actions,
+    ],
   );
 }
 

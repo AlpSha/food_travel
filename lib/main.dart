@@ -31,6 +31,11 @@ class MyApp extends StatelessWidget {
             fontSize: 15,
             fontWeight: FontWeight.w500,
           ),
+          headline3: TextStyle(
+            color: Colors.black,
+            fontSize: 23,
+            fontWeight: FontWeight.w400,
+          ),
         ),
       ),
       home: LoginView(),
