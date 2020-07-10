@@ -52,7 +52,6 @@ class HomeController extends Controller {
 
     _presenter.getShoppingListOnNext = (List<Product> list) {
       itemCountOnList = list.length;
-      print('updated shopping list');
       refreshUI();
     };
 

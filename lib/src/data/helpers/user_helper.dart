@@ -39,10 +39,17 @@ class UserHelper {
       final user = await _firebaseAuth.currentUser();
       uid = user.uid;
       _user = await _fetchUserWithUid(uid);
+      prepareController();
     } catch(e, st) {
       print(e);
       print(st);
     }
+  }
+
+  static void prepareController() {
+    _streamController = StreamController.broadcast(onListen: () {
+      _streamController.add(currentUser);
+    });
   }
 
   static Future<User> _fetchUserWithUid(String uid) async {
@@ -57,12 +64,12 @@ class UserHelper {
     }
   }
 
-  static Future<bool> addProductToFavorites(String barcode) async {
+  static Future<bool> addProductToFavorites(String productId) async {
     try {
       await _firestore.collection(COL_USER).document(uid).updateData({
-        'favoriteProducts': FieldValue.arrayUnion([barcode])
+        'favoriteProducts': FieldValue.arrayUnion([productId])
       });
-      _user.favorites.add(barcode);
+      _user.favorites.add(productId);
       _streamController.add(currentUser);
       return true;
     } catch (e, st) {
@@ -72,12 +79,12 @@ class UserHelper {
     }
   }
 
-  static Future<bool> removeProductFromFavorites(String barcode) async {
+  static Future<bool> removeProductFromFavorites(String productId) async {
     try {
       await _firestore.collection(COL_USER).document(uid).updateData({
-        'favoriteProducts': FieldValue.arrayRemove([barcode])
+        'favoriteProducts': FieldValue.arrayRemove([productId])
       });
-      _user.favorites.removeWhere((bc) => bc == barcode);
+      _user.favorites.removeWhere((id) => id == productId);
       _streamController.add(currentUser);
       return true;
     } catch (e, st) {
@@ -87,9 +94,9 @@ class UserHelper {
     }
   }
 
-  static bool isFavoriteOfUser(String productBarcode) {
-    for (var barcode in _user.favorites) {
-      if (barcode == productBarcode) {
+  static bool isFavoriteOfUser(String productId) {
+    for (var id in _user.favorites) {
+      if (id == productId) {
         return true;
       }
     }
@@ -165,20 +172,7 @@ class UserHelper {
   }
 
   static Stream<User> getCurrentUserStream() {
-    if (_streamController == null) {
-      _streamController = StreamController.broadcast(onListen: () async {
-        if (uid == null) {
-          _streamController
-              .addError(NotLoggedInException('User not logged in'));
-          return null;
-        }
-        if (_user == null) {
-          await _fetchUserWithUid(uid);
-        }
-        _streamController.add(currentUser);
-        return null;
-      });
-    }
+    Future.delayed(Duration.zero).then((value) => _streamController.add(currentUser));
     return _streamController.stream;
   }
 }

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:food_travel/src/app/constants.dart';
 import 'package:food_travel/src/app/pages/product_details/product_details_controller.dart';
 import 'package:food_travel/src/app/widgets/badge.dart';
 import 'package:food_travel/src/app/widgets/colored_tab_bar.dart';
+import 'package:food_travel/src/app/widgets/comments_list_item.dart';
 import 'package:food_travel/src/data/repositories/product_repository_data.dart';
 import 'package:food_travel/src/data/repositories/shopping_repository_data.dart';
 import 'package:food_travel/src/domain/entities/product.dart';
@@ -15,11 +17,14 @@ class ProductDetailsView extends View {
 
   ProductDetailsView(this.product);
 
+  final productRepositoryData = ProductRepositoryData();
+
   @override
   State<StatefulWidget> createState() =>
       _ProductDetailsViewState(ProductDetailsController(
-        ProductRepositoryData(),
+        productRepositoryData,
         ShoppingRepositoryData(),
+        productRepositoryData,
         product,
       ));
 }
@@ -28,11 +33,6 @@ class _ProductDetailsViewState
     extends ViewState<ProductDetailsView, ProductDetailsController> {
   _ProductDetailsViewState(ProductDetailsController controller)
       : super(controller);
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget buildPage() {
@@ -87,24 +87,31 @@ class _ProductDetailsViewState
             children: <Widget>[
               controller.imageUrl == null
                   ? Container(
-                      height: screenHeight * 0.4,
+                      height: screenHeight * 0.27,
                     )
                   : Container(
+                      width: screenWidth,
                       color: kPrimaryWhiteColor,
-                      height: screenHeight * 0.4,
-                      child: Image.network(
-                        controller.imageUrl,
+                      height: screenHeight * 0.27,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: Image.network(
+                          controller.imageUrl,
+                        ),
                       ),
                     ),
               Column(
                 children: <Widget>[
                   SizedBox(
-                    height: screenHeight * 0.35,
+                    height: screenHeight * 0.23,
                   ),
                   Expanded(
                     child: Container(
                       width: screenWidth - 60,
-                      color: kGrey.withOpacity(0.5),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(7)),
+                        color: kGrey.withOpacity(0.5),
+                      ),
                     ),
                   ),
                 ],
@@ -112,23 +119,23 @@ class _ProductDetailsViewState
               Column(
                 children: <Widget>[
                   SizedBox(
-                    height: screenHeight * 0.37,
+                    height: screenHeight * 0.24,
                   ),
                   Expanded(
-                    child: Card(
-                      elevation: 15,
-                      child: Container(
-                        width: screenWidth - 30,
+                    child: Container(
+                      width: screenWidth - 30,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(7)),
                         color: kPrimaryWhiteColor,
-                        child: Padding(
-                          padding: const EdgeInsets.all(25.0),
-                          child: TabBarView(
-                            children: <Widget>[
-                              overallTab(),
-                              ingredientsTab(),
-                              Container(),
-                            ],
-                          ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(25.0),
+                        child: TabBarView(
+                          children: <Widget>[
+                            overallTab(),
+                            ingredientsTab(),
+                            commentsTab(),
+                          ],
                         ),
                       ),
                     ),
@@ -209,6 +216,86 @@ class _ProductDetailsViewState
               fontSize: 16,
             ))
       ],
+    );
+  }
+
+  Widget commentsTab() {
+    return Container(
+      child: controller.reviews == null || controller.isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : Column(
+              children: [
+                if (!controller.commenting)
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: controller.reviews.length,
+                      itemBuilder: (ctx, i) {
+                        if(controller.reviews[i].comment.length == 0) {
+                          return Container();
+                        }
+                        return CommentsListItem(controller.reviews[i]);
+                      },
+                    ),
+                  ),
+                if (controller.commenting)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: SmoothStarRating(
+                      color: kCommentStarColor,
+                      size: 30,
+                      allowHalfRating: false,
+                      onRated: (rating) => controller.commentRating = rating,
+                    ),
+                  ),
+                Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: kGrey,
+                            borderRadius:
+                                BorderRadius.all(Radius.elliptical(20, 30)),
+                            border: Border.all(
+                              color: kPrimaryColor,
+                            ),
+                          ),
+                          child: TextField(
+                            controller: controller.commentController,
+                            decoration: InputDecoration(
+                              contentPadding:
+                                  EdgeInsets.symmetric(horizontal: 8),
+                              border: InputBorder.none,
+                              hintText: 'Yorum',
+                              hintStyle: TextStyle(
+                                fontStyle: FontStyle.italic,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: kPrimaryColor,
+                        ),
+                        child: IconButton(
+                          icon: Icon(Icons.send),
+                          color: kPrimaryWhiteColor,
+                          onPressed: controller.addReview,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
     );
   }
 }

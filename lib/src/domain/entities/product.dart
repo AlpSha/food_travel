@@ -1,6 +1,7 @@
 import 'package:food_travel/src/domain/entities/review.dart';
 
 class Product {
+  String id;
   bool userHasAllergy;
   bool isFavorite;
   String barcode;
@@ -13,6 +14,7 @@ class Product {
   String imageUrl;
 
   Product(
+    this.id,
     this.title,
     this.price,
     this.isFavorite,
@@ -26,6 +28,7 @@ class Product {
   );
 
   Product.fromProduct(Product product) {
+    id = product.id;
     userHasAllergy = product.userHasAllergy;
     isFavorite = product.isFavorite;
     barcode = product.barcode;
@@ -42,9 +45,9 @@ class Product {
 
   String get allergensString {
     var result = '';
-    for(var allergen in allergens) {
+    for (var allergen in allergens) {
       result += '$allergen';
-      if(allergens.last != allergen) {
+      if (allergens.last != allergen) {
         result += ', ';
       }
     }
@@ -53,9 +56,9 @@ class Product {
 
   String get ingredientsString {
     var result = '';
-    for(var ingredient in ingredients) {
+    for (var ingredient in ingredients) {
       result += '$ingredient';
-      if(allergens.last != ingredient) {
+      if (allergens.last != ingredient) {
         result += ', ';
       }
     }

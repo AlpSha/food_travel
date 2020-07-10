@@ -9,6 +9,6 @@ class ProductUtil {
     for (var rev in reviews) {
       total += rev.rate;
     }
-    return double.parse((total / reviews.length).toStringAsFixed(1));
+    return total / reviews.length;
   }
 }

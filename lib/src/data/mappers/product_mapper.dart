@@ -6,16 +6,17 @@ import 'package:food_travel/src/domain/entities/review.dart';
 
 class ProductMapper {
   static Product createProductFromModel(ProductModel productModel) {
-    final List<Review> reviews = List.from(productModel.reviews.map((reviewModel) => Review(
-      comment: reviewModel.comment,
-      rate: reviewModel.stars,
-    )));
+    final List<Review> reviews =
+        List.from(productModel.reviews.map((reviewModel) => Review(
+              comment: reviewModel.comment,
+              rate: reviewModel.stars,
+            )));
     final avgRate = ProductUtil.getAvgRate(reviews);
     final allergens = productModel.allergens;
     final userHasAllergy = UserHelper.userHasAllergyToAny(allergens);
-    final isFavorite = UserHelper.isFavoriteOfUser(productModel.barcode);
-    print(productModel.imageUrl);
+    final isFavorite = UserHelper.isFavoriteOfUser(productModel.productId);
     return Product(
+      productModel.productId,
       productModel.title,
       productModel.price,
       isFavorite,

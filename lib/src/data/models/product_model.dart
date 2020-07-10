@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:food_travel/src/data/models/review_model.dart';
 
 class ProductModel {
   String title;
@@ -30,29 +31,9 @@ class ProductModel {
     ingredients = List.from(snapshot.data['ingredients']);
     allergens = List.from(snapshot.data['allergens']);
     imageUrl = snapshot.data['imageUrl'];
-    productId = snapshot.data['productId'];
+    productId = snapshot.documentID;
     price = snapshot.data['price'];
     reviews = List.from(snapshot.data['reviews'].map((rev) => ReviewModel.fromMap(rev)));
   }
 }
 
-class ReviewModel {
-  String comment;
-  int stars;
-  String language;
-  String uid;
-
-  ReviewModel({
-    this.comment,
-    this.stars,
-    this.language,
-    this.uid,
-  });
-
-  ReviewModel.fromMap(Map<String, dynamic> map) {
-    comment = map['comment'];
-    language = map['language'];
-    stars = map['stars'];
-    uid = map['uid'];
-  }
-}

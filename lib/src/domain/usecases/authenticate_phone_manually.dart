@@ -17,7 +17,6 @@ class AuthenticatePhoneManually extends UseCase<void, AuthenticatePhoneWithSmsPa
         controller.add(true);
       } else {
         controller.add(false);
-        print('logging out for registration');
         _repository.logOut();
       }
       logger.finest("AuthenticatePhoneManually Successful");

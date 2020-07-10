@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:food_travel/src/data/constants.dart';
 import 'package:food_travel/src/data/exceptions/login_failed_exception.dart';
 import 'package:food_travel/src/data/helpers/user_helper.dart';
 import 'package:food_travel/src/data/mappers/user_mapper.dart';
@@ -47,7 +48,6 @@ class FacebookRepository
 
   @override
   Future<bool> get isAuthenticated async {
-    await _firebaseAuth.signOut();
     final user = await _firebaseAuth.currentUser();
     return user != null;
   }
@@ -61,7 +61,9 @@ class FacebookRepository
 
   Future<void> setFacebookFields() async {
     final graphResponse = await http.get(
-        'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email&access_token=$_facebookToken');
+        '$FACEBOOK_GRAPH_QUERY_STRING?'
+            'fields=$FACEBOOK_INFO_FIELDS&'
+            'access_token=$_facebookToken');
     final profile = json.decode(graphResponse.body);
     _userModel
       ..uid = UserHelper.uid

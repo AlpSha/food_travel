@@ -11,6 +11,7 @@ const kPrimaryColorLighter = Color(0xfff4c6ce);
 const kPrimaryColorLightest = Color(0xfff6eaed);
 const kFadedColor = kPrimaryColorLight;
 const kPrimaryTextColor = Color(0xff191919);
+const kPrimaryTextColorLight = Colors.black54;
 const kGrey = Color(0xffe8e8e8);
 const kGreyBorderColor = Color(0xffd2d2d2);
 const kGreyDark = Color(0xffababab);

@@ -50,7 +50,6 @@ class ShoppingHelper {
         'items': FieldValue.arrayUnion([product.barcode])
       });
       _shoppingList.add(product);
-      print(_shoppingList);
       _streamController.add(shoppingList);
       return true;
     } catch (e, st) {

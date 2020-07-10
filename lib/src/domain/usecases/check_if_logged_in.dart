@@ -16,6 +16,7 @@ class CheckIfLoggedIn extends UseCase<bool, CheckIfLoggedInParams> {
       logger.finest("CheckIfLoggedIn Successful");
       controller.close();
     } catch (error) {
+      logger.severe("CheckIfLoggedIn Unsuccessful");
       controller.addError(error);
     }
     return controller.stream;

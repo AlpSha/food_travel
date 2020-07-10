@@ -16,7 +16,6 @@ class GetProductsOnList extends UseCase<List<Product>, void> {
   Future<Stream<List<Product>>> buildUseCaseStream(void params) async {
     void onListChange(products) {
       try {
-        print('list changed');
         controller.add(products);
       } catch(e, st) {
         print(st);
